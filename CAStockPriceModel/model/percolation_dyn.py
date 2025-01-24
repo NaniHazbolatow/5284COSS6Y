@@ -1,4 +1,5 @@
 import numpy as np
+from numba import njit
 
 
 def apply_percolation_dyn(grid: np.ndarray, p_e: float, p_d: float, p_h: float) -> np.ndarray:
@@ -8,11 +9,15 @@ def apply_percolation_dyn(grid: np.ndarray, p_e: float, p_d: float, p_h: float) 
     mask_1, mask_3, mask_4 = _create_masks(grid, neighbours)
 
     n_inactive_neighbour, n_active_neighbour = _count_neighbours(neighbours)
-
     prob_1, prob_3, prob_4 = _calculate_probabilities(n_inactive_neighbour, n_active_neighbour, p_e, p_d, p_h)
 
-    eff_filter_1, eff_filter_3, eff_filter_4 = _create_effective_filters(grid, prob_1, prob_3, prob_4, mask_1, mask_3, mask_4)
-
+    eff_filter_1, eff_filter_3, eff_filter_4 = _create_effective_filters(grid,
+                                                                         prob_1,
+                                                                         prob_3,
+                                                                         prob_4,
+                                                                         mask_1,
+                                                                         mask_3,
+                                                                         mask_4)
     new_grid = _create_new_grid(grid, eff_filter_1, eff_filter_3, eff_filter_4)
 
     return new_grid
@@ -49,6 +54,7 @@ def _count_neighbours(neighbours: np.ndarray) -> [np.ndarray]:
     return n_inactive_neighbour, n_active_neighbour
 
 
+@njit
 def _calculate_probabilities(
         inactive_neighbour: np.ndarray,
         active_neighbour: np.ndarray,
@@ -63,6 +69,7 @@ def _calculate_probabilities(
     return prob_1, prob_3, prob_4
 
 
+@njit
 def _create_effective_filters(
         grid: np.ndarray,
         prob_1: float,
