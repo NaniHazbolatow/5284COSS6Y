@@ -1,25 +1,41 @@
 import numpy as np
-from scipy.ndimage import label
+from numba import njit
 
 
-# The way to find clusters on a grid
+def apply_stochastic_dynamics(grid: np.ndarray, clusters: np.ndarray, A: float, a: float, h: float) -> np.ndarray:
+    new_grid = grid.copy()
 
-grid = np.array([[ 1,  0, -1,  0,  1],
-                 [ 1, -1, -1,  0,  0],
-                 [ 0,  0,  1,  0,  0],
-                 [ 1,  0,  1,  1, -1],
-                 [ 1,  0,  0,  0,  0]])
+    for current_cluster in clusters:
+        cluster_elements = grid[current_cluster]
+        n = np.sum(current_cluster)
 
-structure = np.array([[0, 1, 0],
-                      [1, 1, 1],
-                      [0, 1, 0]])
+        A_ij, h_i = _simulate_connections(n, A, a, h)
 
-active_cells = (grid == 1) | (grid == -1)
+        probabilities = _calculate_buying_probs(n, cluster_elements, A_ij, h_i)
 
-labeled_array, num_clusters = label(active_cells, structure=structure)
+        new_grid[current_cluster] = _cluster_value_upgrade(probabilities)
 
-cluster_filters = [(labeled_array == cluster_id) for cluster_id in range(1, num_clusters + 1)]
+    return new_grid
 
-print(f"Number of clusters: {num_clusters}")
-for i, cluster_filter in enumerate(cluster_filters, start=1):
-    print(f"Cluster {i} filter:\n{cluster_filter}")
+
+@njit
+def _simulate_connections(n: int, A: float, a: float, h: float) -> [np.ndarray]:
+    xi_k = np.random.uniform(-1, 1)
+    nu_ij = np.random.uniform(-1, 1, size=(n, n))
+    zeta_i = np.random.uniform(-1, 1, size=n)
+
+    A_ij = A * xi_k + a * nu_ij
+    h_i = h * zeta_i
+
+    return A_ij, h_i
+
+
+@njit
+def _calculate_buying_probs(n: int, cluster_elements: np.ndarray, A_ij: np.ndarray, h_i: np.ndarray) -> np.ndarray:
+    I_i = np.sum(A_ij * cluster_elements, axis=1) / n + h_i
+    return np.divide(1, 1 + np.exp(-2 * I_i))
+
+
+@njit
+def _cluster_value_upgrade(probabilities: np.ndarray) -> np.ndarray:
+    return np.where(np.random.random(len(probabilities)) > probabilities, -1, 1)
