@@ -27,6 +27,12 @@ def find_clusters(grid: np.ndarray) -> np.ndarray:
     return cluster_filters
 
 
+def order_clusters(clusters: np.ndarray) -> np.ndarray:
+    order = np.argsort(np.sum(clusters, axis=(1, 2)))
+    return clusters[order]
+
+
+
 def calculate_log_return(grid: np.ndarray, clusters: np.ndarray, beta: float) -> float:
 
     trader_weighted_sum = np.sum([np.sum(cluster) * np.sum(grid[cluster]) for cluster in clusters])
