@@ -1,7 +1,6 @@
 import numpy as np
 from numba import njit
 
-
 def apply_stochastic_dynamics(grid: np.ndarray, clusters: np.ndarray, A: float, a: float, h: float) -> np.ndarray:
     new_grid = grid.copy()
 
