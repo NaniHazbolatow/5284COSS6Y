@@ -32,8 +32,8 @@ class TestTradingStrategyStocDyn(unittest.TestCase):
                                     [False, False, False, False, False],
                                     [False, False, False, False, False]],
                                    [[False, False, False, False, False],
-                                    [ True, False, False, False, False],
-                                    [ True, False, False, False, False],
+                                    [True, False, False, False, False],
+                                    [True, False, False, False, False],
                                     [False, False, False, False, False],
                                     [False, False, False, False, False]],
                                    [[False, False, False, False, False],
@@ -45,7 +45,7 @@ class TestTradingStrategyStocDyn(unittest.TestCase):
                                     [False, False, False, False, False],
                                     [False, False, False, False, False],
                                     [False, False, False, False, False],
-                                    [ True, False, False, False, False]]])
+                                    [True, False, False, False, False]]])
         self.delay_categories = np.array([[0, 0, 0, 0, 3],
                                           [2, 0, 0, 0, 0],
                                           [2, 0, 0, 0, 1],
