@@ -11,7 +11,7 @@ The **base model** elements can be found in the following directory:
 CAStockPriceModel/model/base_model
 ```  
 
-We developed the coupling component of the self-organizing model to analyze our research topic. Details can be found in the notes, presentation, and function descriptions within the module:  
+We developed the coupling component of the self-organizing model to analyze our research topic. Details can be found in the Appendix_for_Code.odf file, in the presentation, and function descriptions within the module:  
 ```
 CAStockPriceModel/model/trading_strat/stochastic_dyn.py
 ```
