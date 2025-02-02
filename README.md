@@ -14,6 +14,11 @@ CAStockPriceModel/model/base_model
 We developed the coupling component of the self-organizing model to analyze our research topic. Details can be found in the notes, presentation, and function descriptions within the module:  
 ```
 CAStockPriceModel/model/trading_strat/stochastic_dyn.py
+```
+
+Additional model elements and directions which were not directly used in the final model, but were explored and therefore contributed to the final results can be found under the folder:
+```
+NotUsedModelDevelopments
 ```  
 
 ### **Running the Model**  
